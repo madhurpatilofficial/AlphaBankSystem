@@ -1,11 +1,11 @@
 package com.alphabank.model;
 
 public class Branch {
-	
+
 	private String id;
-	
+
 	private String address;
-	
+
 	private String phone;
 
 	public String getId() {
@@ -32,4 +32,3 @@ public class Branch {
 		this.phone = phone;
 	}
 }
-

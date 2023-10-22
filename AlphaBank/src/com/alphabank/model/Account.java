@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Account {
-	
+
 	private int id;
-	
+
 	private Customer customer;
-	
+
 	private Branch branch;
-	
+
 	private Date openingDate;
-	
+
 	private BigDecimal currentBalance;
-	
+
 	private BigDecimal interestRate;
 
 	public int getId() {
@@ -64,6 +64,5 @@ public class Account {
 	public void setInterestRate(BigDecimal interestRate) {
 		this.interestRate = interestRate;
 	}
-	
-}
 
+}

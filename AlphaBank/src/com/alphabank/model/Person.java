@@ -3,16 +3,16 @@ package com.alphabank.model;
 import java.sql.Date;
 
 public class Person {
-	
+
 	private int id;
-	
+
 	private String login;
 	private String password;
-	
+
 	private String name;
 	private String phone;
 	private String email;
-	
+
 	private Date registrationDate;
 
 	public int getId() {
@@ -70,6 +70,5 @@ public class Person {
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
-
 
 }
