@@ -10,9 +10,9 @@ public class AccountController {
 
 	public Account createAccount() {
 		BankImp bank = new BankImp();
+		Customer customer = new Customer();
 		Account account = new Account();
-		if (bank.add(account)) {
-			System.out.println("Account added successfully!");
+		if (bank.add(account, customer.getId())) {
 		} else {
 			System.out.println("Failed to add account.");
 		}

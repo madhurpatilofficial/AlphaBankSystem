@@ -17,6 +17,10 @@ public class Account {
 
 	private BigDecimal interestRate;
 
+	private int customerId;
+
+	private BigDecimal newBalance;
+
 	public int getId() {
 		return id;
 	}
@@ -65,4 +69,21 @@ public class Account {
 		this.interestRate = interestRate;
 	}
 
+	public void setCustomerId(int customerId) {
+	    this.customerId = customerId;
+	}
+
+	public int getCustomerId() {
+	    return this.customerId;
+	}
+
+	public BigDecimal getBalance() {
+		// TODO Auto-generated method stub
+		return this.currentBalance;
+	}
+
+	public void setBalance(BigDecimal newBalance) {
+		this.newBalance = newBalance;
+		
+	}
 }

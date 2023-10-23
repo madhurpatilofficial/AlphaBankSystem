@@ -1,6 +1,8 @@
 package com.alphabank.controller;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import com.alphabank.model.Account;
 import com.alphabank.model.Customer;
 import com.alphabank.model.Employee;
 import com.alphabank.service.BankImp;
+import com.jdbc.connection.JDBCConnect;
 
 public class CustomerController {
 	Scanner sc = new Scanner(System.in);
@@ -19,7 +22,6 @@ public class CustomerController {
 		BankImp bank = new BankImp();
 		Customer customer = new Customer();
 		if (bank.add(customer)) {
-			System.out.println("Customer added successfully!");
 		} else {
 			System.out.println("Failed to add customer.");
 		}
@@ -130,5 +132,41 @@ public class CustomerController {
 			return false;
 		}
 	}
+	
+	public static void changePasswordCustomer() throws SQLException {
+	    Scanner sc = new Scanner(System.in);
+
+	    System.out.println("*********** Change Password for Customer by ID ****************");
+
+	    System.out.print("Enter customer ID: ");
+	    int customerId = sc.nextInt();
+	    sc.nextLine(); // Consume the newline character left by nextInt()
+
+	    System.out.print("Enter the new password: ");
+	    String newPassword = sc.nextLine();
+
+	    JDBCConnect connection = new JDBCConnect();
+	    Connection con = null;
+
+	    // Update the password in the database
+	    try {
+	        con = connection.getConnection();
+	        String query = "UPDATE Customers SET password = ? WHERE id = ?";
+	        PreparedStatement preparedStatement = con.prepareStatement(query);
+	        preparedStatement.setString(1, newPassword);
+	        preparedStatement.setInt(2, customerId);
+
+	        int updatedRows = preparedStatement.executeUpdate();
+
+	        if (updatedRows > 0) {
+	            System.out.println("Password updated successfully.");
+	        } else {
+	            System.out.println("Failed to update password.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 }

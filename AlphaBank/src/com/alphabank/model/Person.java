@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Person {
 
-	private int id;
+	private static int id;
 
 	private String login;
 	private String password;
@@ -15,7 +15,7 @@ public class Person {
 
 	private Date registrationDate;
 
-	public int getId() {
+	public static int getId() {
 		return id;
 	}
 

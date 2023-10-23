@@ -11,7 +11,7 @@ public interface Bank {
 
 	boolean add(Employee employee);
 
-	boolean add(Account account);
+	boolean add(Account account,int customerId);
 
 	boolean add(Loan loan);
 

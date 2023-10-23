@@ -1,9 +1,11 @@
 package com.alphabank.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,46 +19,100 @@ import com.jdbc.connection.JDBCConnect;
 
 public class CustomerDAO {
 
-	public boolean addCustomerDao(String login, String password, String name, String phone, String email,
+	public Customer addCustomerDao(String login, String password, String name, String phone, String email,
 			String dateStr) {
 		// Database Connection
 		JDBCConnect connection = new JDBCConnect();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet generatedKeys = null;
+
 		try {
 			con = connection.getConnection();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			java.util.Date utilDate = sdf.parse(dateStr);
 			java.sql.Date registrationDate = new java.sql.Date(utilDate.getTime());
 
-			// Create a Customer object
-			Customer newCustomer = new Customer();
-			newCustomer.setLogin(login);
-			newCustomer.setPassword(password);
-			newCustomer.setName(name);
-			newCustomer.setPhone(phone);
-			newCustomer.setEmail(email);
-			newCustomer.setRegistrationDate(registrationDate);
-
 			// Insert the customer into the database
 			String insertQuery = "INSERT INTO customers (login, password, name, phone, email, registrationDate) VALUES (?, ?, ?, ?, ?, ?)";
-			preparedStatement = con.prepareStatement(insertQuery);
-			preparedStatement.setString(1, newCustomer.getLogin());
-			preparedStatement.setString(2, newCustomer.getPassword());
-			preparedStatement.setString(3, newCustomer.getName());
-			preparedStatement.setString(4, newCustomer.getPhone());
-			preparedStatement.setString(5, newCustomer.getEmail());
-			preparedStatement.setDate(6, newCustomer.getRegistrationDate());
+			preparedStatement = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement.setString(1, login);
+			preparedStatement.setString(2, password);
+			preparedStatement.setString(3, name);
+			preparedStatement.setString(4, phone);
+			preparedStatement.setString(5, email);
+			preparedStatement.setDate(6, registrationDate);
 
-			preparedStatement.executeUpdate();
-
-		} catch (SQLException e) {
+			int rowsAffected = preparedStatement.executeUpdate();
+			if (rowsAffected > 0) {
+				generatedKeys = preparedStatement.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					int customerId = generatedKeys.getInt(1);
+					Customer customer = new Customer();
+					customer.setId(customerId);
+					return customer;
+				}
+			}
+		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
+		} finally {
+			try {
+				if (generatedKeys != null) {
+					generatedKeys.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return true;
+		return null;
+
 	}
+//	public boolean addCustomerDao(String login, String password, String name, String phone, String email,
+//			String dateStr) {
+//		// Database Connection
+//		JDBCConnect connection = new JDBCConnect();
+//		Connection con = null;
+//		PreparedStatement preparedStatement = null;
+//		try {
+//			con = connection.getConnection();
+//			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//			java.util.Date utilDate = sdf.parse(dateStr);
+//			java.sql.Date registrationDate = new java.sql.Date(utilDate.getTime());
+//
+//			// Create a Customer object
+//			Customer newCustomer = new Customer();
+//			newCustomer.setLogin(login);
+//			newCustomer.setPassword(password);
+//			newCustomer.setName(name);
+//			newCustomer.setPhone(phone);
+//			newCustomer.setEmail(email);
+//			newCustomer.setRegistrationDate(registrationDate);
+//
+//			// Insert the customer into the database
+//			String insertQuery = "INSERT INTO customers (login, password, name, phone, email, registrationDate) VALUES (?, ?, ?, ?, ?, ?)";
+//			preparedStatement = con.prepareStatement(insertQuery);
+//			preparedStatement.setString(1, newCustomer.getLogin());
+//			preparedStatement.setString(2, newCustomer.getPassword());
+//			preparedStatement.setString(3, newCustomer.getName());
+//			preparedStatement.setString(4, newCustomer.getPhone());
+//			preparedStatement.setString(5, newCustomer.getEmail());
+//			preparedStatement.setDate(6, newCustomer.getRegistrationDate());
+//
+//			preparedStatement.executeUpdate();
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		return true;
+//	}
 
 	public boolean deleteCustomerDao(int customerId) {
 

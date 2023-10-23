@@ -1,12 +1,13 @@
 package com.alphabank.service;
 
-import org.mindrot.jbcrypt.BCrypt;
-
+import java.math.BigDecimal;
 import java.util.Scanner;
+
 import com.alphabank.controller.AccountController;
 import com.alphabank.controller.BranchController;
 import com.alphabank.controller.CustomerController;
 import com.alphabank.controller.EmployeeController;
+import com.alphabank.controller.TransactionController;
 
 public class BankMain extends LoginImpl {
 
@@ -15,6 +16,8 @@ public class BankMain extends LoginImpl {
 		EmployeeController e1 = new EmployeeController();
 		BranchController c1 = new BranchController();
 		AccountController a1 = new AccountController();
+		TransactionController t1 = new TransactionController();
+		BankImp imp = new BankImp();
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -38,6 +41,9 @@ public class BankMain extends LoginImpl {
 				System.out.println("Customer Menu");
 				System.out.println("*******************************");
 				System.out.println("1. Update Customer");
+				System.out.println("2. Change Password");
+				System.out.println("3. View Balance");
+				System.out.println("4. Deposit Money");
 				System.out.print("Enter your choice: ");
 				int customerChoice = scanner.nextInt();
 
@@ -45,6 +51,18 @@ public class BankMain extends LoginImpl {
 				case 1:
 					b1.updateCustomer();
 					break;
+				case 2:
+					b1.changePasswordCustomer();
+					break;
+
+				case 3:
+					t1.viewBalance();
+					break;
+
+				case 4:
+					imp.addDeposit();
+					break;
+
 				default:
 					System.out.println("Invalid choice.");
 				}
@@ -68,6 +86,7 @@ public class BankMain extends LoginImpl {
 					break;
 				case 2:
 					b1.removeCustomer();
+					break;
 				case 3:
 					b1.findCustomerByID();
 					break;
