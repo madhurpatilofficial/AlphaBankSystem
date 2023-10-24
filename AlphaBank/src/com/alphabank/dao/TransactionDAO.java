@@ -20,7 +20,7 @@ public class TransactionDAO {
 
 		try {
 			con = connection.getConnection();
-			String query = "SELECT SUM(balance) AS total_balance FROM Accounts WHERE customer_id = ?";
+			String query = "SELECT SUM(balance) AS total_balance FROM accounts WHERE id = ?";
 			preparedStatement = con.prepareStatement(query);
 			preparedStatement.setInt(1, customerId);
 			ResultSet resultSet = preparedStatement.executeQuery();

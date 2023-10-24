@@ -109,7 +109,7 @@ public class TransactionController {
 		Scanner scanner = new Scanner(System.in);
 
 		// Prompt the user to enter the customer ID
-		System.out.print("Enter Customer ID: ");
+		System.out.print("Enter Account ID: ");
 		int customerId = scanner.nextInt();
 
 		TransactionDAO transactionDAO = new TransactionDAO();
@@ -117,6 +117,9 @@ public class TransactionController {
 
 		// Print the balance
 		System.out.println("Balance: " + balance);
+		if (balance == null) {
+			System.out.println("Invalid Account ID!!!!");
+		}
 
 		return balance; // Return the balance if needed
 	}

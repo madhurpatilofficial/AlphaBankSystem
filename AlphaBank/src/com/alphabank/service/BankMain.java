@@ -1,6 +1,8 @@
 package com.alphabank.service;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.alphabank.controller.AccountController;
@@ -8,8 +10,11 @@ import com.alphabank.controller.BranchController;
 import com.alphabank.controller.CustomerController;
 import com.alphabank.controller.EmployeeController;
 import com.alphabank.controller.TransactionController;
+import com.alphabank.model.Customer;
 
-public class BankMain extends LoginImpl {
+
+//public class BankMain extends LoginImpl {
+public class BankMain{
 
 	public static void main(String[] args) throws Exception {
 		CustomerController b1 = new CustomerController();
@@ -44,6 +49,9 @@ public class BankMain extends LoginImpl {
 				System.out.println("2. Change Password");
 				System.out.println("3. View Balance");
 				System.out.println("4. Deposit Money");
+				System.out.println("5. WithDraw Money");
+				System.out.println("6. Transfer Money");
+				System.out.println("7. View Transaction Details");
 				System.out.print("Enter your choice: ");
 				int customerChoice = scanner.nextInt();
 
@@ -60,7 +68,19 @@ public class BankMain extends LoginImpl {
 					break;
 
 				case 4:
-					imp.addDeposit();
+					imp.deposit();
+					break;
+
+				case 5:
+					imp.withdraw();
+					break;
+
+				case 6:
+					imp.transfer();
+					break;
+
+				case 7:
+					imp.showTransactionDetailsByAccountId();
 					break;
 
 				default:
@@ -74,9 +94,12 @@ public class BankMain extends LoginImpl {
 				System.out.println("Teller Menu");
 				System.out.println("*******************************");
 				System.out.println("1. Create Customer");
+
 				System.out.println("2. Delete Customer");
 				System.out.println("3. Find Customer by ID");
 				System.out.println("4. Find Customers by Name");
+				System.out.println("5. Remove Account");
+				System.out.println("6. Find Managers");
 				System.out.print("Enter your choice: ");
 				customerChoice = scanner.nextInt();
 
@@ -93,6 +116,14 @@ public class BankMain extends LoginImpl {
 				case 4:
 					b1.findCustomersByName();
 					break;
+
+				case 5:
+					a1.removeAccount();
+					break;
+					
+				case 6:
+					 List<String> managers = imp.findAllmanager();
+					 break;
 				default:
 					System.out.println("Invalid choice.");
 				}

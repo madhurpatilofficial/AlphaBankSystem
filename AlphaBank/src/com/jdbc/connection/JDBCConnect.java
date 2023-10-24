@@ -17,12 +17,12 @@ public class JDBCConnect {
 		con = DriverManager.getConnection(url, username, password);
 //		System.out.println(con); //connection object
 		
-		if(con!=null) {
-			System.out.println("Connection is successful....");
-		}
-		else {
-			System.out.println("Not able to connect....");
-		}
+//		if(con!=null) {
+//			System.out.println("Connection is successful....");
+//		}
+//		else {
+//			System.out.println("Not able to connect....");
+//		}
 	}
 	
 	//if any error comes in try block, catch block will execute

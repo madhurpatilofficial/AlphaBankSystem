@@ -15,51 +15,118 @@ import com.jdbc.connection.JDBCConnect;
 import java.sql.Connection;
 
 public class AccountDAO {
-	
-	
+
 	public boolean addAccountDao(int accountId, String openingDate, BigDecimal balance, int customerId) {
-        // Database Connection
-        JDBCConnect connection = new JDBCConnect();
-        Connection con = null;
-        PreparedStatement preparedStatement = null;
+		// Database Connection
+		JDBCConnect connection = new JDBCConnect();
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
 
-        try {
-            con = connection.getConnection();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = sdf.parse(openingDate);
-            java.sql.Date sqlOpeningDate = new java.sql.Date(utilDate.getTime());
+		try {
+			con = connection.getConnection();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			java.util.Date utilDate = sdf.parse(openingDate);
+			java.sql.Date sqlOpeningDate = new java.sql.Date(utilDate.getTime());
 
-            // Set the existing customer's ID
-            String insertQuery = "INSERT INTO accounts (customer_id, id, openingDate, balance) VALUES (?, ?, ?, ?)";
+			// Set the existing customer's ID
+			String insertQuery = "INSERT INTO accounts (customer_id, id, openingDate, balance) VALUES (?, ?, ?, ?)";
 
-            // Initialize the PreparedStatement
-            preparedStatement = con.prepareStatement(insertQuery);
-            preparedStatement.setInt(1, customerId); // Set the customer ID
-            preparedStatement.setInt(2, accountId);
-            preparedStatement.setDate(3, sqlOpeningDate);
-            preparedStatement.setBigDecimal(4, balance);
+			// Initialize the PreparedStatement
+			preparedStatement = con.prepareStatement(insertQuery);
+			preparedStatement.setInt(1, customerId); // Set the customer ID
+			preparedStatement.setInt(2, accountId);
+			preparedStatement.setDate(3, sqlOpeningDate);
+			preparedStatement.setBigDecimal(4, balance);
 
-            // Execute the insert statement
-            int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-	
-	
+			// Execute the insert statement
+			int rowsAffected = preparedStatement.executeUpdate();
+			return rowsAffected > 0;
+		} catch (SQLException | ParseException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	public boolean removeAccountDao(int accountId) {
+		// Database Connection
+		JDBCConnect connection = new JDBCConnect();
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+
+		try {
+			con = connection.getConnection();
+
+			// Delete the account by its ID
+			String deleteQuery = "DELETE FROM accounts WHERE id = ?";
+			preparedStatement = con.prepareStatement(deleteQuery);
+			preparedStatement.setInt(1, accountId);
+
+			int rowsAffected = preparedStatement.executeUpdate();
+			return rowsAffected > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	public boolean isAccountExists(int accountId) {
+		// Database Connection
+		JDBCConnect connection = new JDBCConnect();
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+			con = connection.getConnection();
+
+			// Check if an account with the given ID exists
+			String query = "SELECT id FROM accounts WHERE id = ?";
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setInt(1, accountId);
+			resultSet = preparedStatement.executeQuery();
+
+			return resultSet.next(); // Returns true if a row is found, indicating account existence
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false; // Default to false in case of an exception or no account found
+	}
 
 //	public boolean addAccountDao(int accountId, String openingDate, BigDecimal balance, int customerId) {
 //	    // Database Connection

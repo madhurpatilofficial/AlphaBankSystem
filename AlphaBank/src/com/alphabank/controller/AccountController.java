@@ -1,7 +1,9 @@
 package com.alphabank.controller;
 
 import java.util.List;
+import java.util.Scanner;
 
+import com.alphabank.dao.AccountDAO;
 import com.alphabank.model.Account;
 import com.alphabank.model.Customer;
 import com.alphabank.service.BankImp;
@@ -25,8 +27,18 @@ public class AccountController {
 	}
 
 	public boolean removeAccount() {
-		return false;
+		AccountDAO accountDao = new AccountDAO();
 
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter Account ID: ");
+		int accountId = sc.nextInt();
+		if (accountDao.removeAccountDao(accountId)) {
+			System.out.println("Account removed successfully.");
+			return true;
+		} else {
+			System.out.println("Failed to remove the account.");
+		}
+		return false;
 	}
 
 	public List<Account> getAccountsOfCustomer() {
